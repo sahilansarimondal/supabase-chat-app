@@ -34,10 +34,10 @@ const HeroSection = () => {
             Hey Alex! Are you joining the team meeting today?
           </div>
           <div className="bg-zinc-900 text-white px-3 py-2 rounded-md text-sm w-fit self-end">
-            Yes, I'll be there in 5 minutes.
+            Yes, I&apos;ll be there in 5 minutes.
           </div>
           <div className="bg-muted px-3 py-2 rounded-md text-sm w-fit">
-            Cool! Don’t forget to mention the new feature updates.
+            Cool! Don&apos;t forget to mention the new feature updates.
           </div>
           <div className="bg-zinc-900 text-white px-3 py-2 rounded-md text-sm w-fit self-end">
             Got it, thanks!

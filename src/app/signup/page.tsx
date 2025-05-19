@@ -1,5 +1,6 @@
 import { SignupForm } from "@/components/SignupForm";
 import { GalleryVerticalEnd } from "lucide-react";
+import Image from "next/image";
 
 export default function SignUpPage() {
   return (
@@ -20,7 +21,9 @@ export default function SignUpPage() {
         </div>
       </div>
       <div className="bg-muted relative hidden lg:block">
-        <img
+        <Image
+          width={300}
+          height={300}
           src="/login-poster.png"
           alt="Image"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
