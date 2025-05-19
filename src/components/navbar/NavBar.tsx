@@ -2,7 +2,7 @@ import React from "react";
 import AuthButtons from "./AuthButtons";
 import { GalleryVerticalEnd } from "lucide-react";
 
-const NavBar = () => {
+const NavBar = async () => {
   return (
     <nav className="w-full px-6 bg-white/50 backdrop-blur-sm dark:bg-black/40 flex justify-between items-center py-4 border-b sticky top-0">
       <div className="flex justify-center gap-2 md:justify-start">
