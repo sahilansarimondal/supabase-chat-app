@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { signup } from "@/lib/actions/userAction";
+import GoogleOAuthButton from "./GoogleOAuth";
 
 export function SignupForm({
   className,
@@ -55,6 +56,7 @@ export function SignupForm({
           </svg>
           Login with GitHub
         </Button>
+        <GoogleOAuthButton />
       </div>
       <div className="text-center text-sm">
         Already have an account?{" "}

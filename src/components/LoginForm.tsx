@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { login } from "@/lib/actions/userAction";
+import GoogleOAuthButton from "./GoogleOAuth";
 
 export function LoginForm({
   className,
@@ -61,6 +62,7 @@ export function LoginForm({
           </svg>
           Login with GitHub
         </Button>
+        <GoogleOAuthButton />
       </div>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
