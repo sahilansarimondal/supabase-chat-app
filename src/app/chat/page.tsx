@@ -139,61 +139,6 @@ export default function ChatSection() {
           </div>
         </div>
       </aside>
-      {/* Chat Sidebar */}
-      {/* <aside className="w-[300px] border-r flex flex-col">
-        <div className="p-4 border-b">
-          <h2 className="text-lg font-semibold">Chats</h2>
-          <Input
-            placeholder="Search Messenger"
-            className="mt-3 bg-muted/50 border-none focus-visible:ring-1"
-          />
-        </div>
-
-        <ScrollArea className="flex-1">
-          <div className="divide-y">
-            {chats.map((chat) => (
-              <div
-                key={chat.id}
-                className={`flex items-center space-x-3 p-3 hover:bg-muted/50 cursor-pointer transition-colors ${
-                  activeChat === chat.id ? "bg-muted/30" : ""
-                }`}
-                onClick={() => setActiveChat(chat.id)}
-              >
-                <div className="relative">
-                  <Avatar>
-                    <AvatarImage src={chat.avatar} />
-                    <AvatarFallback>{chat.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  {chat.online && (
-                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-background"></div>
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-center">
-                    <div className="font-medium truncate">{chat.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      12:30 PM
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm text-muted-foreground truncate">
-                      {chat.lastMessage}
-                    </div>
-                    {chat.unread > 0 && (
-                      <Badge
-                        variant="default"
-                        className="h-5 w-5 p-0 flex items-center justify-center"
-                      >
-                        {chat.unread}
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </ScrollArea>
-      </aside> */}
       {/* Updated Chat Sidebar component with proper scroll and sizing */}
       <aside className="w-[300px] border-r flex flex-col h-full">
         <div className="p-4 border-b">
@@ -285,7 +230,6 @@ export default function ChatSection() {
             </Button>
           </div>
         </div>
-
         {/* Messages */}
         <ScrollArea className="flex-1 p-4 space-y-4">
           <div className="space-y-3">
@@ -319,7 +263,6 @@ export default function ChatSection() {
             ))}
           </div>
         </ScrollArea>
-
         {/* Message Input */}
         <div className="border-t p-3 bg-background">
           <div className="flex items-center gap-2">
