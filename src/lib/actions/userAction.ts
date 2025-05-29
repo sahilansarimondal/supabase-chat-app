@@ -47,3 +47,9 @@ export async function signup(formData: FormData) {
   revalidatePath("/", "layout");
   redirect("/chat");
 }
+
+export const getUserId = async () => {
+  const supabase = await createClient();
+  const user = await supabase.auth.getUser();
+  return user.data.user?.id;
+};
