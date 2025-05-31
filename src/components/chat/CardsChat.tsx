@@ -33,6 +33,7 @@ import {
 } from "../ui/command";
 import { addMessageToDb } from "@/lib/actions/clientMessageAction";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 interface Message {
   role: string;
@@ -47,54 +48,35 @@ interface MessagePayload {
   sender_id: string;
 }
 
-const users = [
-  {
-    name: "Olivia Martin",
-    email: "m@example.com",
-    avatar: "/avatars/01.png",
-  },
-  {
-    name: "Isabella Nguyen",
-    email: "isabella.nguyen@email.com",
-    avatar: "/avatars/03.png",
-  },
-  {
-    name: "Emma Wilson",
-    email: "emma@example.com",
-    avatar: "/avatars/05.png",
-  },
-  {
-    name: "Jackson Lee",
-    email: "lee@example.com",
-    avatar: "/avatars/02.png",
-  },
-  {
-    name: "William Kim",
-    email: "will@email.com",
-    avatar: "/avatars/04.png",
-  },
-] as const;
-
-type User = (typeof users)[number];
+interface Users {
+  id: string;
+  updated_at?: string;
+  username?: string;
+  avatar_url: string;
+  full_name: string;
+}
 
 export function CardsChat({
   chatId,
   userId,
   prevMessages,
+  allUsers,
 }: {
   chatId: string;
   userId: string;
   prevMessages: { role: string; content: string }[];
+  allUsers: Users[];
 }) {
+  const client = createClient();
   const [open, setOpen] = React.useState(false);
-  const [selectedUsers, setSelectedUsers] = React.useState<User[]>([]);
-
+  const [selectedUsers, setSelectedUsers] = React.useState<Users[]>([]);
+  const router = useRouter();
   const [messages, setMessages] = React.useState<Message[]>(prevMessages);
   const [input, setInput] = React.useState("");
   const inputLength = input.trim().length;
 
   React.useEffect(() => {
-    const channel = createClient()
+    const channel = client
       .channel("realtime-messages")
       .on(
         "postgres_changes",
@@ -120,9 +102,36 @@ export function CardsChat({
     };
   }, [chatId, userId]);
 
+  const handleChatCreate = async (receiverId: string) => {
+    const { data, error } = await client
+      .from("chat")
+      .select("*")
+      .filter("chat_users", "cs", `{${receiverId}, ${userId}}`)
+      .single();
+
+    if (!data) {
+      const { data, error } = await client
+        .from("chat")
+        .insert([{ chat_users: [userId, receiverId] }])
+        .select("id")
+        .single();
+      if (error) {
+        console.log(error);
+        router.push("/error");
+      }
+      if (data) {
+        router.push(`/chat/${data.id}`);
+      }
+    }
+
+    if (data) {
+      router.push(`/chat/${data.id}`);
+    }
+  };
+
   return (
     <>
-      <Card>
+      <Card className="flex flex-col h-screen">
         <CardHeader className="flex flex-row items-center">
           <div className="flex items-center space-x-4">
             <Avatar>
@@ -151,7 +160,7 @@ export function CardsChat({
             </Tooltip>
           </TooltipProvider>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex-1 overflow-y-auto space-y-2">
           <div className="space-y-4">
             {messages.map((message, index) => (
               <div
@@ -168,7 +177,7 @@ export function CardsChat({
             ))}
           </div>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="mt-4">
           <form
             onSubmit={(event) => {
               event.preventDefault();
@@ -207,41 +216,31 @@ export function CardsChat({
             <CommandList>
               <CommandEmpty>No users found.</CommandEmpty>
               <CommandGroup className="p-2">
-                {users.map((user) => (
+                {allUsers.map((user) => (
                   <CommandItem
-                    key={user.email}
-                    className="flex items-center px-2"
-                    onSelect={() => {
-                      if (selectedUsers.includes(user)) {
-                        return setSelectedUsers(
-                          selectedUsers.filter(
-                            (selectedUser) => selectedUser !== user
-                          )
-                        );
-                      }
-
-                      return setSelectedUsers(
-                        [...users].filter((u) =>
-                          [...selectedUsers, user].includes(u)
-                        )
-                      );
-                    }}
+                    key={user.id}
+                    className="flex items-center px-2 cursor-pointer"
                   >
-                    <Avatar>
-                      <AvatarImage src={user.avatar} alt="Image" />
-                      <AvatarFallback>{user.name[0]}</AvatarFallback>
-                    </Avatar>
-                    <div className="ml-2">
-                      <p className="text-sm font-medium leading-none">
-                        {user.name}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {user.email}
-                      </p>
+                    <div
+                      className=" flex items-center w-full"
+                      onClick={() => handleChatCreate(user.id)}
+                    >
+                      <Avatar>
+                        <AvatarImage src={user.avatar_url} alt="Image" />
+                        <AvatarFallback>{user.full_name[0]}</AvatarFallback>
+                      </Avatar>
+                      <div className="ml-2">
+                        <p className="text-sm font-medium leading-none">
+                          {user.full_name}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {user.full_name}
+                        </p>
+                      </div>
+                      {selectedUsers.includes(user) ? (
+                        <Check className="ml-auto flex h-5 w-5 text-primary" />
+                      ) : null}
                     </div>
-                    {selectedUsers.includes(user) ? (
-                      <Check className="ml-auto flex h-5 w-5 text-primary" />
-                    ) : null}
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -252,11 +251,11 @@ export function CardsChat({
               <div className="flex -space-x-2 overflow-hidden">
                 {selectedUsers.map((user) => (
                   <Avatar
-                    key={user.email}
+                    key={user.id}
                     className="inline-block border-2 border-background"
                   >
-                    <AvatarImage src={user.avatar} />
-                    <AvatarFallback>{user.name[0]}</AvatarFallback>
+                    <AvatarImage src={user.avatar_url} />
+                    <AvatarFallback>{user.full_name[0]}</AvatarFallback>
                   </Avatar>
                 ))}
               </div>

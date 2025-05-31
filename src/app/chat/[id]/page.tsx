@@ -27,8 +27,8 @@ const PersonalRoom = async ({
     }
   });
 
-  console.log(fetchMessages);
-  console.log("error: ", error);
+  const allUsers = await client.from("profiles").select("*").neq("id", userId);
+  console.log("all users: ", allUsers);
   if (!userId) {
     redirect("/error");
   }
@@ -38,6 +38,7 @@ const PersonalRoom = async ({
         chatId={id}
         userId={userId}
         prevMessages={fetchMessages ?? []}
+        allUsers={allUsers.data ?? []}
       />
     </div>
   );
