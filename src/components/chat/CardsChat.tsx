@@ -67,9 +67,10 @@ export function CardsChat({
   prevMessages: { role: string; content: string }[];
   allUsers: Users[];
 }) {
+  const bottomRef = React.useRef<HTMLDivElement>(null);
   const client = createClient();
   const [open, setOpen] = React.useState(false);
-  const [selectedUsers, setSelectedUsers] = React.useState<Users[]>([]);
+  const [selectedUsers] = React.useState<Users[]>([]);
   const router = useRouter();
   const [messages, setMessages] = React.useState<Message[]>(prevMessages);
   const [input, setInput] = React.useState("");
@@ -100,10 +101,14 @@ export function CardsChat({
     return () => {
       createClient().removeChannel(channel);
     };
-  }, [chatId, userId]);
+  }, [chatId, userId, client]);
+
+  React.useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleChatCreate = async (receiverId: string) => {
-    const { data, error } = await client
+    const { data } = await client
       .from("chat")
       .select("*")
       .filter("chat_users", "cs", `{${receiverId}, ${userId}}`)
@@ -176,6 +181,7 @@ export function CardsChat({
               </div>
             ))}
           </div>
+          <div ref={bottomRef} />
         </CardContent>
         <CardFooter className="mt-4">
           <form

@@ -3,7 +3,6 @@ import {
   Card,
   CardAction,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -11,12 +10,19 @@ import {
 
 import { createClient } from "@/lib/supabase/server";
 
+import { UserCard } from "./NavUser";
 import ChatList from "./ChatList";
 
 const ChatSidebar = async () => {
   const client = await createClient();
-  const user = await client.auth.getUser();
-  const userId = user.data.user?.id;
+  const { data } = await client.auth.getUser();
+  const userId = data.user?.id;
+  const fullUser = await client
+    .from("profiles")
+    .select()
+    .eq("id", userId)
+    .single();
+  console.log("full user: ", fullUser);
   if (!userId) {
     return <div>User not authenticated</div>;
   }
@@ -27,18 +33,24 @@ const ChatSidebar = async () => {
   console.log("all users: ", allUsers);
 
   return (
-    <Card className="w-80 h-full bg-white shadow-lg">
-      <CardHeader>
-        <CardTitle>Chats</CardTitle>
-        <CardDescription>Card Description</CardDescription>
+    <Card className="w-80 shadow-lg pb-2 flex flex-col h-screen">
+      <CardHeader className="">
+        <CardTitle className=" text-xl">Chats</CardTitle>
+        {/* <CardDescription>Card Description</CardDescription> */}
         <CardAction>Card Action</CardAction>
       </CardHeader>
-      <CardContent>
-        <ChatList allUsers={allUsers} userId={userId} />
-      </CardContent>
-      <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter>
+      <div className="flex flex-col overflow-hidden flex-1">
+        <CardContent className="flex-1 overflow-auto px-0 ">
+          <ChatList allUsers={allUsers} userId={userId} />
+        </CardContent>
+        <CardFooter className=" px-0">
+          <UserCard
+            name={fullUser.data.full_name}
+            avatarUrl={fullUser.data.avatar_url}
+            email="sahil@gamil.com"
+          />
+        </CardFooter>
+      </div>
     </Card>
   );
 };

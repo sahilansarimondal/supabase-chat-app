@@ -53,3 +53,9 @@ export const getUserId = async () => {
   const user = await supabase.auth.getUser();
   return user.data.user?.id;
 };
+
+export async function logout() {
+  const supabase = await createClient(); // this calls cookies()
+  await supabase.auth.signOut();
+  redirect("/login");
+}

@@ -13,7 +13,7 @@ const PersonalRoom = async ({
   const user = await client.auth.getUser();
   const userId = user.data.user?.id;
 
-  const { data: fetchMessages, error } = await client
+  const { data: fetchMessages } = await client
     .from("messages")
     .select("*")
     .eq("chat_id", id)

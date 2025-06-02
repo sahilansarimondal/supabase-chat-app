@@ -9,6 +9,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandSeparator,
 } from "../ui/command";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -31,7 +32,7 @@ const ChatList = ({
   const client = createClient();
   const router = useRouter();
   const handleChatCreate = async (receiverId: string) => {
-    const { data, error } = await client
+    const { data } = await client
       .from("chat")
       .select("*")
       .filter("chat_users", "cs", `{${receiverId}, ${userId}}`)
@@ -59,13 +60,229 @@ const ChatList = ({
   return (
     <Command className="overflow-hidden rounded-t-none border-t bg-transparent">
       <CommandInput placeholder="Search user..." />
-      <CommandList>
+      <CommandList className="overflow-auto max-h-full">
         <CommandEmpty>No users found.</CommandEmpty>
         <CommandGroup className="p-2">
           {allUsers.map((user) => (
             <CommandItem
               key={user.id}
-              className="flex items-center px-2 cursor-pointer"
+              className="flex items-center px-1 cursor-pointer mb-2"
+            >
+              <div
+                className=" flex items-center w-full"
+                onClick={() => handleChatCreate(user.id)}
+              >
+                <Avatar>
+                  <AvatarImage src={user.avatar_url} alt="Image" />
+                  <AvatarFallback>{user.full_name[0]}</AvatarFallback>
+                </Avatar>
+                <div className="ml-2">
+                  <p className="text-sm font-medium leading-none">
+                    {user.full_name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {user.full_name}
+                  </p>
+                </div>
+                {/* {selectedUsers.includes(user) ? (
+                      <Check className="ml-auto flex h-5 w-5 text-primary" />
+                    ) : null} */}
+              </div>
+            </CommandItem>
+          ))}
+          {allUsers.map((user) => (
+            <CommandItem
+              key={user.id}
+              className="flex items-center px-1 cursor-pointer mb-2"
+            >
+              <div
+                className=" flex items-center w-full"
+                onClick={() => handleChatCreate(user.id)}
+              >
+                <Avatar>
+                  <AvatarImage src={user.avatar_url} alt="Image" />
+                  <AvatarFallback>{user.full_name[0]}</AvatarFallback>
+                </Avatar>
+                <div className="ml-2">
+                  <p className="text-sm font-medium leading-none">
+                    {user.full_name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {user.full_name}
+                  </p>
+                </div>
+                {/* {selectedUsers.includes(user) ? (
+                      <Check className="ml-auto flex h-5 w-5 text-primary" />
+                    ) : null} */}
+              </div>
+            </CommandItem>
+          ))}
+          {allUsers.map((user) => (
+            <CommandItem
+              key={user.id}
+              className="flex items-center px-1 cursor-pointer mb-2"
+            >
+              <div
+                className=" flex items-center w-full"
+                onClick={() => handleChatCreate(user.id)}
+              >
+                <Avatar>
+                  <AvatarImage src={user.avatar_url} alt="Image" />
+                  <AvatarFallback>{user.full_name[0]}</AvatarFallback>
+                </Avatar>
+                <div className="ml-2">
+                  <p className="text-sm font-medium leading-none">
+                    {user.full_name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {user.full_name}
+                  </p>
+                </div>
+                {/* {selectedUsers.includes(user) ? (
+                      <Check className="ml-auto flex h-5 w-5 text-primary" />
+                    ) : null} */}
+              </div>
+            </CommandItem>
+          ))}
+          {allUsers.map((user) => (
+            <CommandItem
+              key={user.id}
+              className="flex items-center px-1 cursor-pointer mb-2"
+            >
+              <div
+                className=" flex items-center w-full"
+                onClick={() => handleChatCreate(user.id)}
+              >
+                <Avatar>
+                  <AvatarImage src={user.avatar_url} alt="Image" />
+                  <AvatarFallback>{user.full_name[0]}</AvatarFallback>
+                </Avatar>
+                <div className="ml-2">
+                  <p className="text-sm font-medium leading-none">
+                    {user.full_name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {user.full_name}
+                  </p>
+                </div>
+                {/* {selectedUsers.includes(user) ? (
+                      <Check className="ml-auto flex h-5 w-5 text-primary" />
+                    ) : null} */}
+              </div>
+            </CommandItem>
+          ))}
+          {allUsers.map((user) => (
+            <CommandItem
+              key={user.id}
+              className="flex items-center px-1 cursor-pointer mb-2"
+            >
+              <div
+                className=" flex items-center w-full"
+                onClick={() => handleChatCreate(user.id)}
+              >
+                <Avatar>
+                  <AvatarImage src={user.avatar_url} alt="Image" />
+                  <AvatarFallback>{user.full_name[0]}</AvatarFallback>
+                </Avatar>
+                <div className="ml-2">
+                  <p className="text-sm font-medium leading-none">
+                    {user.full_name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {user.full_name}
+                  </p>
+                </div>
+                {/* {selectedUsers.includes(user) ? (
+                      <Check className="ml-auto flex h-5 w-5 text-primary" />
+                    ) : null} */}
+              </div>
+            </CommandItem>
+          ))}
+          {allUsers.map((user) => (
+            <CommandItem
+              key={user.id}
+              className="flex items-center px-1 cursor-pointer mb-2"
+            >
+              <div
+                className=" flex items-center w-full"
+                onClick={() => handleChatCreate(user.id)}
+              >
+                <Avatar>
+                  <AvatarImage src={user.avatar_url} alt="Image" />
+                  <AvatarFallback>{user.full_name[0]}</AvatarFallback>
+                </Avatar>
+                <div className="ml-2">
+                  <p className="text-sm font-medium leading-none">
+                    {user.full_name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {user.full_name}
+                  </p>
+                </div>
+                {/* {selectedUsers.includes(user) ? (
+                      <Check className="ml-auto flex h-5 w-5 text-primary" />
+                    ) : null} */}
+              </div>
+            </CommandItem>
+          ))}
+          {allUsers.map((user) => (
+            <CommandItem
+              key={user.id}
+              className="flex items-center px-1 cursor-pointer mb-2"
+            >
+              <div
+                className=" flex items-center w-full"
+                onClick={() => handleChatCreate(user.id)}
+              >
+                <Avatar>
+                  <AvatarImage src={user.avatar_url} alt="Image" />
+                  <AvatarFallback>{user.full_name[0]}</AvatarFallback>
+                </Avatar>
+                <div className="ml-2">
+                  <p className="text-sm font-medium leading-none">
+                    {user.full_name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {user.full_name}
+                  </p>
+                </div>
+                {/* {selectedUsers.includes(user) ? (
+                      <Check className="ml-auto flex h-5 w-5 text-primary" />
+                    ) : null} */}
+              </div>
+            </CommandItem>
+          ))}
+          {allUsers.map((user) => (
+            <CommandItem
+              key={user.id}
+              className="flex items-center px-1 cursor-pointer mb-2"
+            >
+              <div
+                className=" flex items-center w-full"
+                onClick={() => handleChatCreate(user.id)}
+              >
+                <Avatar>
+                  <AvatarImage src={user.avatar_url} alt="Image" />
+                  <AvatarFallback>{user.full_name[0]}</AvatarFallback>
+                </Avatar>
+                <div className="ml-2">
+                  <p className="text-sm font-medium leading-none">
+                    {user.full_name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {user.full_name}
+                  </p>
+                </div>
+                {/* {selectedUsers.includes(user) ? (
+                      <Check className="ml-auto flex h-5 w-5 text-primary" />
+                    ) : null} */}
+              </div>
+            </CommandItem>
+          ))}
+          {allUsers.map((user) => (
+            <CommandItem
+              key={user.id}
+              className="flex items-center px-1 cursor-pointer mb-2"
             >
               <div
                 className=" flex items-center w-full"
