@@ -7,8 +7,8 @@ export default async function ChatLayout({
   children: React.ReactNode;
 }) {
   const client = await createClient();
-  const user = await client.auth.getUser();
-  const userId = user.data.user?.id;
+  const { data } = await client.auth.getUser();
+  const userId = data.user?.id;
   if (!userId) {
     return <div>User not authenticated</div>;
   }
